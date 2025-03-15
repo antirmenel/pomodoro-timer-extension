@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pomodoro Timer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <meta
+      name="description"
+      content="A simple Pomodoro timer to boost productivity and focus."
+    />
+    <meta name="theme-color" content="#e11d45" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Pomodoro Timer</h1>
+      <div id="timer" aria-live="assertive">25:00</div>
+      <div class="buttons">
+        <button id="start" aria-label="Start Timer">
+          <i class="fas fa-play"></i>
+        </button>
+        <button id="reset" aria-label="Reset Timer">
+          <i class="fas fa-sync-alt"></i>
+        </button>
+        <button id="soundToggle" aria-label="Toggle Sound">
+          <i class="fas fa-volume-up"></i>
+        </button>
+      </div>
+    </div>
+    <script src="popup.js"></script>
+  </body>
+</html>

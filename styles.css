@@ -1,0 +1,101 @@
+/* Global Styles */
+body {
+font-family: "Raleway", sans-serif;  
+color: #fff;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #f5f5f5;
+}
+
+.container {
+  text-align: center;
+  background: linear-gradient(135deg, #FAACA8 0%, #e11d45 100%);
+  padding: 25px;
+  width: 240px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+}
+
+.container:hover {
+  transform: scale(1.05);
+}
+
+#timer {
+  font-size: 48px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 20px;
+  color: #fff;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-evenly;
+  gap: 20px;
+}
+
+button {
+  background-color: #e11d45;
+  border: none;
+  color: #fff;
+  padding: 12px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 24px;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+button:hover {
+  background-color: #FAACA8;
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+button:active {
+  transform: translateY(2px);
+}
+
+button i {
+  font-size: 22px;
+}
+
+/* Responsive Styles */
+@media (max-width: 400px) {
+  .container {
+    width: 220px;
+    padding: 20px;
+  }
+
+  #timer {
+    font-size: 42px;
+  }
+
+  button {
+    font-size: 20px;
+    width: 50px;
+    height: 50px;
+  }
+}
+
+@media (max-width: 320px) {
+  #timer {
+    font-size: 36px;
+  }
+
+  button {
+    font-size: 18px;
+    width: 45px;
+    height: 45px;
+  }
+}
