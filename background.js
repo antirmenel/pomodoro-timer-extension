@@ -50,12 +50,28 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   return true;
 });
 
-function startTimer(duration) {
-  timerEndTime = Date.now() + duration * 1000;
-  isPaused = false;
-  saveTimerState();
-  startAlarm(duration);
-  playSound("start");
+function startTimer() {
+  if (!isRunning) {
+    chrome.runtime.sendMessage({ action: "getTimeLeft" }, (response) => {
+      if (response && response.isPaused) {
+        chrome.runtime.sendMessage({ action: "resumeTimer" });
+        playSound("unpause");
+        startButton.innerHTML = '<i class="fas fa-pause"></i>';
+      } else {
+        const duration = 25 * 60;
+        chrome.runtime.sendMessage({ action: "startTimer", duration });
+        playSound("start");
+        startButton.innerHTML = '<i class="fas fa-pause"></i>';
+      }
+      isRunning = true;
+      fetchTimeLeft();
+    });
+  } else {
+    isRunning = false;
+    startButton.innerHTML = '<i class="fas fa-play"></i>';
+    chrome.runtime.sendMessage({ action: "pauseTimer" });
+    playSound("pause");
+  }
 }
 
 function getTimeLeft(sendResponse) {
