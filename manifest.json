@@ -7,11 +7,15 @@
     "default_popup": "popup.html",
     "default_icon": "icon.png"
   },
-  "permissions": ["alarms", "notifications", "storage"],
+  "permissions": [
+    "alarms",
+    "notifications",
+    "storage"
+  ],
   "background": {
     "service_worker": "background.js"
   },
   "icons": {
     "128": "icon.png"
-  },
+  }
 }
