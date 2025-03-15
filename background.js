@@ -3,6 +3,7 @@ let isPaused = false;
 let pausedTimeLeft = 0;
 let isSoundEnabled = true;
 
+// Load saved state from storage
 chrome.storage.local.get(
   ["timerEndTime", "isPaused", "pausedTimeLeft", "soundEnabled"],
   (data) => {
@@ -13,6 +14,7 @@ chrome.storage.local.get(
   }
 );
 
+// Save the current state to storage
 function saveTimerState() {
   chrome.storage.local.set({
     timerEndTime,
@@ -22,6 +24,7 @@ function saveTimerState() {
   });
 }
 
+// Handle messages from the popup
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   const { action, duration, soundEnabled } = message;
 
@@ -50,30 +53,16 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   return true;
 });
 
-function startTimer() {
-  if (!isRunning) {
-    chrome.runtime.sendMessage({ action: "getTimeLeft" }, (response) => {
-      if (response && response.isPaused) {
-        chrome.runtime.sendMessage({ action: "resumeTimer" });
-        playSound("unpause");
-        startButton.innerHTML = '<i class="fas fa-pause"></i>';
-      } else {
-        const duration = 25 * 60;
-        chrome.runtime.sendMessage({ action: "startTimer", duration });
-        playSound("start");
-        startButton.innerHTML = '<i class="fas fa-pause"></i>';
-      }
-      isRunning = true;
-      fetchTimeLeft();
-    });
-  } else {
-    isRunning = false;
-    startButton.innerHTML = '<i class="fas fa-play"></i>';
-    chrome.runtime.sendMessage({ action: "pauseTimer" });
-    playSound("pause");
-  }
+// Start the timer
+function startTimer(duration) {
+  timerEndTime = Date.now() + duration * 1000;
+  isPaused = false;
+  saveTimerState();
+  startAlarm(duration);
+  playSound("start");
 }
 
+// Get the remaining time
 function getTimeLeft(sendResponse) {
   const timeLeft = isPaused
     ? pausedTimeLeft
@@ -82,6 +71,7 @@ function getTimeLeft(sendResponse) {
   sendResponse({ timeLeft, isPaused });
 }
 
+// Pause the timer
 function pauseTimer() {
   isPaused = true;
   pausedTimeLeft = Math.max(0, Math.round((timerEndTime - Date.now()) / 1000));
@@ -90,6 +80,7 @@ function pauseTimer() {
   playSound("pause");
 }
 
+// Resume the timer
 function resumeTimer() {
   isPaused = false;
   timerEndTime = Date.now() + pausedTimeLeft * 1000;
@@ -98,6 +89,7 @@ function resumeTimer() {
   playSound("unpause");
 }
 
+// Reset the timer
 function resetTimer() {
   timerEndTime = 0;
   isPaused = false;
@@ -107,21 +99,25 @@ function resetTimer() {
   playSound("reset");
 }
 
+// Toggle sound on/off
 function toggleSound(soundEnabled) {
   isSoundEnabled = soundEnabled;
   saveTimerState();
 }
 
+// Play a sound
 function playSound(action) {
   if (isSoundEnabled) {
     chrome.runtime.sendMessage({ action: "playSound", sound: action });
   }
 }
 
+// Start an alarm
 function startAlarm(duration) {
   chrome.alarms.create("pomodoro", { delayInMinutes: duration / 60 });
 }
 
+// Handle alarm events
 chrome.alarms.onAlarm.addListener((alarm) => {
   if (alarm.name === "pomodoro") {
     showNotification();
@@ -129,6 +125,7 @@ chrome.alarms.onAlarm.addListener((alarm) => {
   }
 });
 
+// Show a notification
 function showNotification() {
   chrome.notifications.create({
     type: "basic",
